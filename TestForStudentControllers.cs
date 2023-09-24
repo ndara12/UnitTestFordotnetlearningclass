@@ -115,7 +115,7 @@ namespace UnitTestForLearningClass
             var result = await controller.UpdateStudent(1, updatedStudent);
 
             // Assert
-            Assert.IsType<NoContentResult>(result);
+            Assert.IsType<OkResult>(result);
             Assert.Equal(existingStudent.StudentName, "Updated John Doe"); // Check if the entity is updated
             Assert.Equal(existingStudent.StudentClassId, 2);
         }
@@ -158,6 +158,7 @@ namespace UnitTestForLearningClass
             };
 
             mockRepository.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(existingStudent);
+            mockRepository.Setup(repo => repo.DeleteAsync(existingStudent)).Returns(Task.CompletedTask); // Mock the DeleteAsync method
 
             // Act
             var result = await controller.DeleteStudent(1);
@@ -165,6 +166,7 @@ namespace UnitTestForLearningClass
             // Assert
             Assert.IsType<NoContentResult>(result);
         }
+
 
         [Fact]
         public async Task DeleteStudent_NonExistingId_ReturnsNotFoundResult()
